@@ -10,7 +10,7 @@
     <!-- Latest compiled and minified bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   <title>Wind Turbine Data</title>
   
   </head>
@@ -19,7 +19,7 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/dollarToEuro">Conversions!</a>
+          <a class="navbar-brand" href="/">Home</a>
         </div>
           <ul class="nav navbar-nav">
             <li {% if active_page == "dollar-euro" %}class="active"{% endif %}><a href="/dollarToEuro">Dollar-Euro</a></li>
@@ -28,12 +28,15 @@
           </ul>
       </div>
     </nav>
-    
+    <div class="content">
     <!--page content-->
 	<h1>Wind Turbine Data</h1>
 	
-  <p>Wind Turbines Are Cool</p>
+	<p class="indented">This CORGIS Dataset I used is on all of the commercial wind power plants in the United States.  Each wind turbine is recorded with many statistics about it including its power generated, height, turbine diameter, position, year it became operational, and many other facts.  These statistics can be used to review the data and figure out how wind turbine efficiency has increased over time as well as other statistics we are able to measure.</p>
+	<p class="indented">One question I had is which turbines they include in the JSON file and which they don’t.  According to the website that CORGIS got its data, the <a href="https://www.sciencebase.gov/catalog/item/57bdfd8fe4b03fd6b7df5ff9">United States Wind Turbine Database</a>, almost all of the wind turbines recorded are utility scale, which means that they generate power that is fed right into the grid.  This means that they don’t record small or single wind turbines, but any big turbine operation should be recorded. </p>
+	<p class="indented">I am very curious to find out more facts about how wind turbine size affects power generated, how power generation per turbine increased over the years, and many other statistics about turbines. </p>
   
+  	</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

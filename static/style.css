@@ -1,0 +1,12 @@
+.indented{
+	text-indent: 30pt;
+}
+.content{
+	padding: 20px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: gray;
+	margin: 5px;
+	background-repeat: round;
+	text-align: left;
+}
