@@ -7,12 +7,31 @@ app = Flask(__name__)
 @app.route("/")
 def render_main():
 	with open('wind_turbines.json') as turbine_data:
-		counties = json.load(turbine_data)
+		turbines = json.load(turbine_data)
 	return render_template('home.html')
+	
+def get_state_options(turbines):
+	listOfStates = ['']
+	for data in turbines:
+		if data['Site']['State'] not in listOfStates:
+			listOfStates.append(data['Site']['State'])
+	options = ""
+	for data in listOfStates:
+		options = options + Markup("<option value=\""+data+"\">"+data+"</option>")
+	return options
 	
 @app.route("/ByState")
 def render_page1():
-	return render_template('state.html')
+	with open('wind_turbines.json') as turbine_data:
+		turbines = json.load(turbine_data)
+	powerList = []
+	if 'states' in request.args:
+		for data in turbines:
+			if data['Site']['State'] == request.args['state']:
+				powerList.append(data['Turbine']['Capacity'])
+		average = sum(powerList) / len(powerList)
+		return render_template('state.html', states = get_state_options(turbines), averageKW = average)
+	else: return render_template('state.html', states = get_state_options(turbines))
 	
 @app.route("/ByRotorSize")
 def render_page2():
