@@ -27,15 +27,21 @@ def render_page1():
 	powerList = []
 	if 'states' in request.args:
 		for data in turbines:
-			if data['Site']['State'] == request.args['state']:
+			if data['Site']['State'] == request.args['states']:
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList) / len(powerList)
-		return render_template('state.html', states = get_state_options(turbines), averageKW = average)
+		return render_template('state.html', states = get_state_options(turbines), averageKW = average, state = request.args['states'])
 	else: return render_template('state.html', states = get_state_options(turbines))
 	
 @app.route("/ByRotorSize")
 def render_page2():
-	return render_template('rotor.html')
+	with open('wind_turbines.json') as turbine_data:
+		turbines = json.load(turbine_data)
+	rotorList = []
+	for data in turbines:
+		if data['Turbine']['Rotor_Diameter'] not in rotorList:
+			rotorList.append(data['Turbine']['Rotor_Diameter'])
+	return render_template('rotor.html', averageKW = rotorList)
 	
 @app.route("/ByYear")
 def render_page3():
