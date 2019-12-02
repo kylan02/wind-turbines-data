@@ -38,10 +38,22 @@ def render_page2():
 	with open('wind_turbines.json') as turbine_data:
 		turbines = json.load(turbine_data)
 	rotorList = []
-	for data in turbines:
-		if data['Turbine']['Rotor_Diameter'] not in rotorList:
-			rotorList.append(data['Turbine']['Rotor_Diameter'])
-	return render_template('rotor.html', averageKW = rotorList)
+	if 'averageKW' in request.args:
+		for data in turbines:
+			if data['Turbine']['Rotor_Diameter'] not in rotorList:
+				rotorList.append(data['Turbine']['Rotor_Diameter'])
+		rotorList.sort()
+		powerList = []
+		for data in rotorList:
+			powerList.append(data['Turbine']['Capacity'])
+		average = sum(powerList) / len(powerList)
+		return render_template('rotor.html', rotorSize = get_state_options(turbines), averageKW = average, rotor = request.args['rotorList'])
+	else:
+		for data in turbines:
+			if data['Turbine']['Rotor_Diameter'] not in rotorList:
+				rotorList.append(data['Turbine']['Rotor_Diameter'])
+		rotorList.sort()
+		return render_template('rotor.html', states = get_state_options(turbines))
 	
 @app.route("/ByYear")
 def render_page3():
