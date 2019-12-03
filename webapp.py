@@ -20,6 +20,17 @@ def get_state_options(turbines):
 		options = options + Markup("<option value=\""+data+"\">"+data+"</option>")
 	return options
 	
+def get_rotor_sizes(turbines):
+	listOfRotors = []
+	for data in turbines:
+		if data['Turbine']['Rotor_Diameter'] not in listOfRotors:
+			listOfRotors.append(data['Turbine']['Rotor_Diameter'])
+	listOfRotors.sort()
+	options = ""
+	for data in listOfRotors:
+		options = options + Markup("<option value=\""+str(data)+"\">"+str(data)+"</option>")
+	return options
+	
 @app.route("/ByState")
 def render_page1():
 	with open('wind_turbines.json') as turbine_data:
@@ -37,23 +48,17 @@ def render_page1():
 def render_page2():
 	with open('wind_turbines.json') as turbine_data:
 		turbines = json.load(turbine_data)
-	rotorList = []
-	if 'averageKW' in request.args:
+	powerList = []
+	if 'rotorSize' in request.args:
+		print(request.args['rotorSize'])
 		for data in turbines:
-			if data['Turbine']['Rotor_Diameter'] not in rotorList:
-				rotorList.append(data['Turbine']['Rotor_Diameter'])
-		rotorList.sort()
-		powerList = []
-		for data in rotorList:
-			powerList.append(data['Turbine']['Capacity'])
+			if data['Turbine']['Rotor_Diameter'] == request.args['rotorSize']:
+				powerList.append(data['Turbine']['Capacity'])
+				print("if is true")
+		print(powerList)
 		average = sum(powerList) / len(powerList)
-		return render_template('rotor.html', rotorSize = get_state_options(turbines), averageKW = average, rotor = request.args['rotorList'])
-	else:
-		for data in turbines:
-			if data['Turbine']['Rotor_Diameter'] not in rotorList:
-				rotorList.append(data['Turbine']['Rotor_Diameter'])
-		rotorList.sort()
-		return render_template('rotor.html', states = get_state_options(turbines))
+		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'])
+	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines))
 	
 @app.route("/ByYear")
 def render_page3():
