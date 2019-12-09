@@ -31,6 +31,28 @@ def get_rotor_sizes(turbines):
 		options = options + Markup("<option value=\""+str(data)+"\">"+str(data)+"</option>")
 	return options
 	
+def get_years(turbines):
+	listOfYears = []
+	for data in turbines:
+		if data['Year'] not in listOfYears:
+			listOfYears.append(data['Year'])
+	listOfYears.sort()
+	options = ""
+	for data in listOfYears:
+		options = options + Markup("<option value=\""+str(data)+"\">"+str(data)+"</option>")
+	return options
+	
+def get_height(turbines):
+	listOfHeights = []
+	for data in turbines:
+		if data['Turbine']['Hub_Height'] not in listOfHeights:
+			listOfHeights.append(data['Turbine']['Hub_Height'])
+	listOfHeights.sort()
+	options = ""
+	for data in listOfHeights:
+		options = options + Markup("<option value=\""+str(data)+"\">"+str(data)+"</option>")
+	return options
+	
 @app.route("/ByState")
 def render_page1():
 	with open('wind_turbines.json') as turbine_data:
@@ -50,23 +72,38 @@ def render_page2():
 		turbines = json.load(turbine_data)
 	powerList = []
 	if 'rotorSize' in request.args:
-		print(request.args['rotorSize'])
 		for data in turbines:
-			if data['Turbine']['Rotor_Diameter'] == request.args['rotorSize']:
+			if float(data['Turbine']['Rotor_Diameter']) == float(request.args['rotorSize']):
 				powerList.append(data['Turbine']['Capacity'])
-				print("if is true")
-		print(powerList)
 		average = sum(powerList) / len(powerList)
 		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'])
 	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines))
 	
 @app.route("/ByYear")
 def render_page3():
-	return render_template('year.html')
+	with open('wind_turbines.json') as turbine_data:
+		turbines = json.load(turbine_data)
+	powerList = []
+	if 'year' in request.args:
+		for data in turbines:
+			if int(data['Year']) == int(request.args['year']):
+				powerList.append(data['Turbine']['Capacity'])
+		average = sum(powerList)/ len(powerList)
+		return render_template('year.html', year = get_years(turbines), averageKW = average, selectedYear = request.args['year'])
+	else: return render_template('year.html', year = get_years(turbines))
 	
 @app.route("/ByHeight")
 def render_page4():
-	return render_template('height.html')
+	with open('wind_turbines.json') as turbine_data:
+		turbines = json.load(turbine_data)
+	powerList = []
+	if 'height' in request.args:
+		for data in turbines:
+			if float(data['Turbine']['Hub_Height']) == float(request.args['height']):
+				powerList.append(data['Turbine']['Capacity'])
+		average = sum(powerList)/ len(powerList)
+		return render_template('height.html', height = get_height(turbines), averageKW = average, selectedHeight = request.args['height'])
+	else: return render_template('height.html', height = get_height(turbines))
 	
 if __name__=="__main__":
     app.run(debug=False)

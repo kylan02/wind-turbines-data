@@ -33,14 +33,14 @@
       </div>
     </nav> 
     
-	<form action="/">
-      <select name="states">
-        {{ states }}
+	<form action="/ByHeight">
+      <select name="height">
+        {{ height }}
       </select>
       <br><br>
       <input type="submit">
     </form>
-	<p>The highest travel time is {{ highestTravelTime[1] }} in {{ highestTravelTime[0] }}</p>
+	<p>The average power for {{ selectedHeight }} is {{ averageKW }} kilowatts</p>
 	
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
