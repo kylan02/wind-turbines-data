@@ -63,6 +63,7 @@ def render_page1():
 			if data['Site']['State'] == request.args['states']:
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList) / len(powerList)
+		average = round(1000*average)/1000
 		return render_template('state.html', states = get_state_options(turbines), averageKW = average, state = request.args['states'])
 	else: return render_template('state.html', states = get_state_options(turbines))
 	
@@ -76,6 +77,7 @@ def render_page2():
 			if float(data['Turbine']['Rotor_Diameter']) == float(request.args['rotorSize']):
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList) / len(powerList)
+		average = round(1000*average)/1000
 		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'])
 	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines))
 	
@@ -89,6 +91,7 @@ def render_page3():
 			if int(data['Year']) == int(request.args['year']):
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList)/ len(powerList)
+		average = round(1000*average)/1000
 		return render_template('year.html', year = get_years(turbines), averageKW = average, selectedYear = request.args['year'])
 	else: return render_template('year.html', year = get_years(turbines))
 	
@@ -102,6 +105,7 @@ def render_page4():
 			if float(data['Turbine']['Hub_Height']) == float(request.args['height']):
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList)/ len(powerList)
+		average = round(1000*average)/1000
 		return render_template('height.html', height = get_height(turbines), averageKW = average, selectedHeight = request.args['height'])
 	else: return render_template('height.html', height = get_height(turbines))
 	
