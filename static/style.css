@@ -17,3 +17,10 @@ body{
 	padding: 5px;
 	margin: 1px;
 	background-color: #bcdfeb;
+}
+.picture {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
