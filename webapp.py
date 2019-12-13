@@ -65,7 +65,7 @@ def render_page1():
 		average = sum(powerList) / len(powerList)
 		average = round(1000*average)/1000
 		return render_template('state.html', states = get_state_options(turbines), averageKW = average, state = request.args['states'])
-	else: return render_template('state.html', states = get_state_options(turbines))
+	else: return render_template('state.html', states = get_state_options(turbines), averageKW = "___", state = "___")
 	
 @app.route("/ByRotorSize")
 def render_page2():
@@ -79,7 +79,7 @@ def render_page2():
 		average = sum(powerList) / len(powerList)
 		average = round(1000*average)/1000
 		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'])
-	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines))
+	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = "___", rotor ="___")
 	
 @app.route("/ByYear")
 def render_page3():
@@ -93,7 +93,7 @@ def render_page3():
 		average = sum(powerList)/ len(powerList)
 		average = round(1000*average)/1000
 		return render_template('year.html', year = get_years(turbines), averageKW = average, selectedYear = request.args['year'])
-	else: return render_template('year.html', year = get_years(turbines))
+	else: return render_template('year.html', year = get_years(turbines), averageKW = "___", selectedYear = "___")
 	
 @app.route("/ByHeight")
 def render_page4():
@@ -107,7 +107,7 @@ def render_page4():
 		average = sum(powerList)/ len(powerList)
 		average = round(1000*average)/1000
 		return render_template('height.html', height = get_height(turbines), averageKW = average, selectedHeight = request.args['height'])
-	else: return render_template('height.html', height = get_height(turbines))
+	else: return render_template('height.html', height = get_height(turbines), averageKW = "___", selectedHeight = "___")
 	
 if __name__=="__main__":
     app.run(debug=False)
