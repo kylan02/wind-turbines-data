@@ -53,7 +53,7 @@ def get_height(turbines):
 		options = options + Markup("<option value=\""+str(data)+"\">"+str(data)+"</option>")
 	return options
 	
-def get_graph_points(turbines):
+def get_graph_points_rotor(turbines):
 	listOfRotors = []
 	options = ""
 	for data in turbines:
@@ -61,6 +61,22 @@ def get_graph_points(turbines):
 			listOfRotors.append(data['Turbine']['Rotor_Diameter'])
 			options = options + Markup("{ x: "+str(data['Turbine']['Rotor_Diameter'])+", y: "+str(data['Turbine']['Capacity'])+" }, ")
 	return options	
+	
+def get_graph_points_year(turbines):
+	year = {}
+	listOfYears = {}
+	numberOfYears = {}
+	options = ""
+	for data in turbines:
+		if data['Year'] not in listOfYears:
+			listOfYears[data['Year']] = data['Turbine']['Capacity']
+			numberOfYears[data['Year']] = 1
+		else: 
+			listOfYears[data['Year']] += data['Turbine']['Capacity']
+			numberOfYears[data['Year']] += 1
+	for data in listOfYears:
+		options = options + Markup("{ x: new Date("+str(data)+",0), y: "+str((round((listOfYears[data]/numberOfYears[data])*100))/100)+" }, ")
+	return options
 	
 @app.route("/ByState")
 def render_page1():
@@ -87,8 +103,8 @@ def render_page2():
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList) / len(powerList)
 		average = round(1000*average)/1000
-		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'], points = get_graph_points(turbines))
-	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = "___", rotor ="___", points = get_graph_points(turbines))
+		return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = average, rotor = request.args['rotorSize'], points = get_graph_points_rotor(turbines))
+	else: return render_template('rotor.html', rotorSize = get_rotor_sizes(turbines), averageKW = "___", rotor ="___", points = get_graph_points_rotor(turbines))
 	
 @app.route("/ByYear")
 def render_page3():
@@ -101,8 +117,8 @@ def render_page3():
 				powerList.append(data['Turbine']['Capacity'])
 		average = sum(powerList)/ len(powerList)
 		average = round(1000*average)/1000
-		return render_template('year.html', year = get_years(turbines), averageKW = average, selectedYear = request.args['year'])
-	else: return render_template('year.html', year = get_years(turbines), averageKW = "___", selectedYear = "___")
+		return render_template('year.html', year = get_years(turbines), averageKW = average, selectedYear = request.args['year'], points = get_graph_points_year(turbines))
+	else: return render_template('year.html', year = get_years(turbines), averageKW = "___", selectedYear = "___", points = get_graph_points_year(turbines))
 	
 @app.route("/ByHeight")
 def render_page4():
